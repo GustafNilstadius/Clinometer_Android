@@ -1,18 +1,28 @@
 package hipernx.clinometer_android;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorEventListener2;
+import android.hardware.SensorManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+/**
+ * @author Gustaf HiPERnx Nilstadius
+ * @date 2016-02-11
+ */
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class ClinometerActivity extends AppCompatActivity {
+public class ClinometerActivity extends AppCompatActivity implements SensorEventListener {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -30,6 +40,17 @@ public class ClinometerActivity extends AppCompatActivity {
      * and a change of the status and navigation bar.
      */
     private static final int UI_ANIMATION_DELAY = 300;
+
+    /**
+     * Sensor manager for accelerometer.
+     */
+    private SensorManager mSensorManager;
+
+    /**
+     * Sensor for pitch and rotation
+     */
+    private Sensor mRotation;
+
     private final Handler mHideHandler = new Handler();
     private View mContentView;
     private final Runnable mHidePart2Runnable = new Runnable() {
@@ -83,6 +104,20 @@ public class ClinometerActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Notified when sensor is changed
+     * @param sensorEvent Sensor event containing values of mRotation sensor
+     */
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent){
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +140,15 @@ public class ClinometerActivity extends AppCompatActivity {
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener); //TODO Remove
+
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
+        mSensorManager.registerListener( this, mRotation, 10000);
+
+
+
     }
 
     @Override
