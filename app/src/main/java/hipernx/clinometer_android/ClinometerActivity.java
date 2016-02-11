@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 /**
@@ -110,7 +111,7 @@ public class ClinometerActivity extends AppCompatActivity implements SensorEvent
      */
     @Override
     public void onSensorChanged(SensorEvent sensorEvent){
-
+        Log.d("SensorChanged", sensorEvent.values[0] + "," + sensorEvent.values[1]);
     }
 
     @Override
@@ -142,10 +143,9 @@ public class ClinometerActivity extends AppCompatActivity implements SensorEvent
         // while interacting with the UI.
         findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener); //TODO Remove
 
-
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
-        mSensorManager.registerListener( this, mRotation, 10000);
+        mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        mSensorManager.registerListener( this, mRotation, 300000, 300000);
 
 
 
