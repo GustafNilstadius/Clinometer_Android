@@ -19,6 +19,8 @@ import android.view.View;
  * @date 2016-02-11
  */
 
+//TODO add calibrate button
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -111,6 +113,9 @@ public class ClinometerActivity extends AppCompatActivity implements SensorEvent
      */
     @Override
     public void onSensorChanged(SensorEvent sensorEvent){
+        //TODO Convert to degrees
+        //TODO update view (text for now)
+        //TODO Handel accuracy
         Log.d("SensorChanged", sensorEvent.values[0] + "," + sensorEvent.values[1]);
     }
 
