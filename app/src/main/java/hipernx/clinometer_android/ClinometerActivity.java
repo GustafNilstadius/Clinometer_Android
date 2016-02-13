@@ -113,10 +113,29 @@ public class ClinometerActivity extends AppCompatActivity implements SensorEvent
      */
     @Override
     public void onSensorChanged(SensorEvent sensorEvent){
-        //TODO Convert to degrees
-        //TODO update view (text for now)
-        //TODO Handel accuracy
-        Log.d("SensorChanged", sensorEvent.values[0] + "," + sensorEvent.values[1]);
+        if(sensorEvent.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
+            //TODO Convert to degrees
+            //TODO update view (text for now)
+            //TODO Handel accuracy
+
+
+            //TODO test conversion
+            float[] rotationValues = new float[3];
+            float[] mRotationMatrix = new float[16];
+            SensorManager.getRotationMatrixFromVector(mRotationMatrix, sensorEvent.values);
+            SensorManager
+                    .remapCoordinateSystem(mRotationMatrix,
+                            SensorManager.AXIS_X, SensorManager.AXIS_Z,
+                            mRotationMatrix);
+            SensorManager.getOrientation(mRotationMatrix, rotationValues);
+
+            rotationValues[0] = (float) Math.toDegrees(rotationValues[0]);
+            rotationValues[1] = (float) Math.toDegrees(rotationValues[1]);
+            rotationValues[2] = (float) Math.toDegrees(rotationValues[2]);
+
+            Log.d("SensorChanged", rotationValues[0] + "," + rotationValues[1] + "," + rotationValues[2]);
+        }
+
     }
 
     @Override
