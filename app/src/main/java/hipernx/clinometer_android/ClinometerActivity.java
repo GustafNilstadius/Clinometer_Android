@@ -14,6 +14,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
+
 /**
  * @author Gustaf HiPERnx Nilstadius
  * @date 2016-02-11
@@ -26,6 +28,12 @@ import android.view.View;
  * status bar and navigation/system bar) with user interaction.
  */
 public class ClinometerActivity extends AppCompatActivity implements SensorEventListener {
+
+    /**
+     * Constants for the sensor values
+     */
+    private static final int PITCH = 2;
+    private static final int ROLL = 1;
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -133,6 +141,16 @@ public class ClinometerActivity extends AppCompatActivity implements SensorEvent
             rotationValues[1] = (float) Math.toDegrees(rotationValues[1]);
             rotationValues[2] = (float) Math.toDegrees(rotationValues[2]);
 
+            //TODO replace with fragments
+            TextView pitch = (TextView) findViewById(R.id.pitch);
+            int pitch_int = (int) rotationValues[PITCH];
+            pitch.setText(pitch_int + "");
+
+            TextView roll = (TextView) findViewById(R.id.roll);
+            int roll_int = (int) rotationValues[ROLL];
+            roll.setText(roll_int + "");
+
+
             Log.d("SensorChanged", rotationValues[0] + "," + rotationValues[1] + "," + rotationValues[2]);
         }
 
@@ -151,7 +169,7 @@ public class ClinometerActivity extends AppCompatActivity implements SensorEvent
 
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
-        mContentView = findViewById(R.id.fullscreen_content);
+        mContentView = findViewById(R.id.roll);
 
 
         // Set up the user interaction to manually show or hide the system UI.
@@ -167,6 +185,7 @@ public class ClinometerActivity extends AppCompatActivity implements SensorEvent
         // while interacting with the UI.
         findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener); //TODO Remove
 
+        //TODO use fregments for pitch and roll
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         mSensorManager.registerListener( this, mRotation, 300000, 300000);
