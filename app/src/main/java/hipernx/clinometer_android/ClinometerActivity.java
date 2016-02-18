@@ -27,13 +27,10 @@ import android.widget.TextView;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class ClinometerActivity extends AppCompatActivity implements SensorEventListener {
+public class ClinometerActivity extends AppCompatActivity {
 
-    /**
-     * Constants for the sensor values
-     */
-    private static final int PITCH = 2;
-    private static final int ROLL = 1;
+
+    private static OrientationListener orientationListener = null;
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -115,51 +112,6 @@ public class ClinometerActivity extends AppCompatActivity implements SensorEvent
         }
     };
 
-    /**
-     * Notified when sensor is changed
-     * @param sensorEvent Sensor event containing values of mRotation sensor
-     */
-    @Override
-    public void onSensorChanged(SensorEvent sensorEvent){
-        if(sensorEvent.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
-            //TODO Convert to degrees
-            //TODO update view (text for now)
-            //TODO Handel accuracy
-
-
-            //TODO test conversion
-            float[] rotationValues = new float[3];
-            float[] mRotationMatrix = new float[16];
-            SensorManager.getRotationMatrixFromVector(mRotationMatrix, sensorEvent.values);
-            SensorManager
-                    .remapCoordinateSystem(mRotationMatrix,
-                            SensorManager.AXIS_X, SensorManager.AXIS_Z,
-                            mRotationMatrix);
-            SensorManager.getOrientation(mRotationMatrix, rotationValues);
-
-            rotationValues[0] = (float) Math.toDegrees(rotationValues[0]);
-            rotationValues[1] = (float) Math.toDegrees(rotationValues[1]);
-            rotationValues[2] = (float) Math.toDegrees(rotationValues[2]);
-
-            //TODO replace with fragments
-            TextView pitch = (TextView) findViewById(R.id.pitch);
-            int pitch_int = (int) rotationValues[PITCH];
-            pitch.setText(pitch_int + "");
-
-            TextView roll = (TextView) findViewById(R.id.roll);
-            int roll_int = (int) rotationValues[ROLL];
-            roll.setText(roll_int + "");
-
-
-            Log.d("SensorChanged", rotationValues[0] + "," + rotationValues[1] + "," + rotationValues[2]);
-        }
-
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,6 +121,9 @@ public class ClinometerActivity extends AppCompatActivity implements SensorEvent
 
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
+
+
+
         mContentView = findViewById(R.id.roll);
 
 
@@ -186,6 +141,7 @@ public class ClinometerActivity extends AppCompatActivity implements SensorEvent
         findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener); //TODO Remove
 
         //TODO use fregments for pitch and roll
+        orientationListener = new OrientationListener()
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         mSensorManager.registerListener( this, mRotation, 300000, 300000);
