@@ -1,20 +1,17 @@
 package hipernx.clinometer_android;
 
 import android.annotation.SuppressLint;
+import android.app.Fragment;
 import android.content.Context;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorEventListener2;
 import android.hardware.SensorManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 /**
  * @author Gustaf HiPERnx Nilstadius
@@ -135,6 +132,13 @@ public class ClinometerActivity extends AppCompatActivity {
             }
         });
 
+        Fragment pitch = (Fragment) ClinometerFragment.newInstance("Pitch", "kakor");
+
+        Fragment roll = ClinometerFragment.newInstance("Roll", "kakor");
+
+        LinearLayout linearLayout = findViewById(R.id.MainLinearLayout);
+        linearLayout.addView(pitch);
+        linearLayout.addView(roll);
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
